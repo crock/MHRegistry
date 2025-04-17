@@ -43,7 +43,7 @@ public class SubmitBuildCommand implements CommandExecutor {
         }
 
         if (args.length < 2) {
-            sender.sendMessage("§cUsage: /submitbuild <buildName> <regionName>");
+            sender.sendMessage("§cUsage:-Yearly /submitbuild <buildName> <regionName>");
             return true;
         }
 
@@ -53,9 +53,18 @@ public class SubmitBuildCommand implements CommandExecutor {
         FileConfiguration config = plugin.getPluginConfig();
         String apiUrl = config.getString("api.url");
         String apiKey = config.getString("api.key");
+        String serverName = config.getString("server.name", "UnknownServer");
 
         if (apiUrl == null || apiKey == null) {
             sender.sendMessage("§cPlugin configuration is invalid! Please contact an administrator.");
+            return true;
+        }
+
+        // Validate API URL
+        try {
+            URI.create(apiUrl).toURL();
+        } catch (Exception e) {
+            sender.sendMessage("§cInvalid API URL in configuration!");
             return true;
         }
 
@@ -69,8 +78,8 @@ public class SubmitBuildCommand implements CommandExecutor {
                     // Initialize block data map
                     Map<String, Integer> blockData = new HashMap<>();
                     boolean regionValid = false;
-                    double[] minCorner = new double[3];
-                    double[] maxCorner = new double[3];
+                    int[] minCorner = new int[3];
+                    int[] maxCorner = new int[3];
 
                     // Check for WorldGuard and process region
                     if (plugin.isWorldGuardEnabled()) {
@@ -92,17 +101,19 @@ public class SubmitBuildCommand implements CommandExecutor {
                                 BlockVector3 maxVector = region.getMaximumPoint();
                                 Location max = new Location(world, maxVector.x(), maxVector.y(), maxVector.z());
 
-                                // Store corners
-                                minCorner = new double[]{min.getX(), min.getY(), min.getZ()};
-                                maxCorner = new double[]{max.getX(), max.getY(), max.getZ()};
+                                // Store corners as integers
+                                minCorner = new int[]{min.getBlockX(), min.getBlockY(), min.getBlockZ()};
+                                maxCorner = new int[]{max.getBlockX(), max.getBlockY(), max.getBlockZ()};
 
-                                // Count block types
+                                // Count block types (skip air blocks)
                                 for (int x = min.getBlockX(); x <= max.getBlockX(); x++) {
                                     for (int y = min.getBlockY(); y <= max.getBlockY(); y++) {
                                         for (int z = min.getBlockZ(); z <= max.getBlockZ(); z++) {
                                             Block block = world.getBlockAt(x, y, z);
                                             String blockType = block.getType().name();
-                                            blockData.put(blockType, blockData.getOrDefault(blockType, 0) + 1);
+                                            if (!blockType.equals("AIR")) { // Skip air blocks
+                                                blockData.put(blockType, blockData.getOrDefault(blockType, 0) + 1);
+                                            }
                                         }
                                     }
                                 }
@@ -128,9 +139,14 @@ public class SubmitBuildCommand implements CommandExecutor {
                     }
                     blockDataJson.append("}");
 
-                    // Get server IP and port
+                    // Get server IP, port, and version
                     String serverIp = plugin.getServer().getIp().isEmpty() ? "localhost" : plugin.getServer().getIp();
                     String serverPort = String.valueOf(plugin.getServer().getPort() != 0 ? plugin.getServer().getPort() : 25565);
+                    String serverVersion = org.bukkit.Bukkit.getMinecraftVersion(); // e.g., "1.20.4"
+
+                    // Get player data
+                    String playerUsername = player.getName();
+                    String playerUuid = player.getUniqueId().toString();
 
                     // Get player location (integers)
                     Location playerLoc = player.getLocation();
@@ -141,14 +157,14 @@ public class SubmitBuildCommand implements CommandExecutor {
                     URL url = URI.create(apiUrl).toURL();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "text/plain");
+                    conn.setRequestProperty("Content-Type", "application/json");
                     // conn.setRequestProperty("Authorization", "Bearer " + apiKey);
                     conn.setDoOutput(true);
 
                     String jsonInputString = String.format(
-                            "{\"buildName\":\"%s\",\"player\":\"%s\",\"server\":{\"ip\":\"%s\",\"port\":\"%s\"},\"region\":{\"name\":\"%s\",\"corners\":[[%f,%f,%f],[%f,%f,%f]]},\"location\":{\"x\":%d,\"y\":%d,\"z\":%d},\"blocks\":%s}",
-                            buildName, player.getName(),
-                            serverIp, serverPort,
+                            "{\"buildName\":\"%s\",\"player_username\":\"%s\",\"player_uuid\":\"%s\",\"server\":{\"ip\":\"%s\",\"port\":\"%s\",\"name\":\"%s\",\"version\":\"%s\"},\"region\":{\"name\":\"%s\",\"corners\":[[%d,%d,%d],[%d,%d,%d]]},\"tp_location\":{\"x\":%d,\"y\":%d,\"z\":%d},\"blocks\":%s}",
+                            buildName, playerUsername, playerUuid,
+                            serverIp, serverPort, serverName, serverVersion,
                             regionName, minCorner[0], minCorner[1], minCorner[2], maxCorner[0], maxCorner[1], maxCorner[2],
                             locX, locY, locZ,
                             blockDataJson

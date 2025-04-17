@@ -1,3 +1,5 @@
 api:
   url: "https://api.example.com/submit"
   key: "your-api-key-here"
+server:
+  name: "MyMinecraftServer"
