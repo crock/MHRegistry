@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MHRegistry | Minecraft Server Plugin</title>
+  <meta name="sitemap" content="/sitemap.xml">
+
+  <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/languages/bash.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+  <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+</head>
+<body>
+<header class="site-header">
+  <div class="header-container">
+    <h1 class="site-title">MH Registry</h1>
+    <p class="site-tagline">Minecraft Server Plugin</p>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Main Content Column -->
+  <div class="main-content">
+
+    <h1 class="page-title">Build Registry Plugin for Minecraft Servers</h1>
+
+    <div class="intro-text">
+      <p>MHRegistry is a simple Minecraft server plugin to read and count the various block types inside a WorldGuard region and send that data to a configurable rest api endpoint.</p>
+
+      <p>It can be used to enrich web directories with valuable data. For instance, on a directory of Minecraft builds, you should show the total number and types of Minecraft blocks that make up any build in the directory.</p>
+
+      <p>The source code is <a href="https://github.com/crock/MHRegistry" target="_blank">available to view on GitHub</a>. I am currently accepting contributions from both new and experienced developers. I actively tag issues with <strong><a
+              href="https://goodfirstissue.dev/">good-first-issue</a></strong> to help new developers get valuable experience to land them a job in tech.</p>
+    </div>
+
+    <section class="content-section">
+      <h2>Plugin Usage</h2>
+
+      <p>Make sure both WorldGuard and WorldEdit are installed or the plugin won't work.</p>
+
+      <p>First, you need to define a new WorldGuard region.</p>
+
+      <p>Then, you can run the command <code>/submitbuild</code>.</p>
+
+      <pre><code class="language-bash">/submitbuild &lt;build name&gt; [region name]</code></pre>
+    </section>
+
+    <section class="content-section">
+      <h2>Permissions</h2>
+
+      <p>The permission node for the command is <code>mhregistry.submit</code> and defaults to OP. This allows a user to submit builds to the configured api endpoint.</p>
+    </section>
+  </div>
+
+  <!-- Sidebar Column -->
+  <div class="sidebar">
+    <!-- Recent Posts Widget -->
+    <div class="widget recent-posts">
+      <h2 class="widget-title">Recent Posts</h2>
+      <ul class="post-list">
+        <li><a href="/">Getting Started with MHRegistry</a></li>
+        <li><a href="/api-integration-guide">API Integration Guide</a></li>
+      </ul>
+    </div>
+
+    <!-- Plugin Releases Widget -->
+    <div class="widget plugin-releases">
+      <h2 class="widget-title">Plugin Releases</h2>
+      <div class="release-status">
+        <div class="status-indicator pending"></div>
+        <p><a href="https://github.com/crock/MHRegistry/releases/tag/v1.0-SNAPSHOT">v1.0-SNAPSHOT</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <p>&copy; 2025 <a href="https://domaincord.com">Domaincord Ventures</a>. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>hljs.highlightAll();</script>
+</body>
+</html>

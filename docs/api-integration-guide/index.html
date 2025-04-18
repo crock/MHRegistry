@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Integration Guide | MH Registry</title>
+    <meta name="sitemap" content="/sitemap.xml">
+
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/languages/json.min.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/languages/bash.min.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.9.0/languages/php.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+</head>
+<body>
+<header class="site-header">
+    <div class="header-container">
+        <h1 class="site-title">MH Registry</h1>
+        <p class="site-tagline">Minecraft Server Plugin</p>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Main Content Column -->
+    <div class="main-content">
+
+        <h1 class="page-title">API Integration Guide for Minecraft directory websites</h1>
+
+        <div class="intro-text">
+            <p>You can build your directory website in basically anything. This guide is not a comprehensive coding tutorial. I'm just offering some basic insight into how you could integrate with this plugin.</p>
+        </div>
+
+        <section class="content-section">
+            <h2>API Request Payload</h2>
+
+            <p>This is a sample payload that the plugin sends to your configured API endpoint:</p>
+            <pre><code class="language-json">
+{
+  "buildName": "Castle",
+  "player_username": "PlayerName",
+  "player_uuid": "123e4567-e89b-12d3-a456-426614174000",
+  "server": {
+    "ip": "192.168.1.100",
+    "port": "25565",
+    "name": "MyMinecraftServer",
+    "version": "1.20.4"
+  },
+  "region": {
+    "name": "castle_region",
+    "corners": [[100, 64, 100], [150, 80, 150]]
+  },
+  "tp_location": {
+    "x": 125,
+    "y": 65,
+    "z": 125
+  },
+  "blocks": {
+    "STONE": 150,
+    "OAK_PLANKS": 80,
+    "GLASS": 20
+  }
+}
+          </code></pre>
+
+            <p>Your custom rest api endpoint needs to be able to handle POST requests with the Content-Type being <code>application/json</code>. The request body will follow the sample schema above.</p>
+        </section>
+    </div>
+
+    <!-- Sidebar Column -->
+    <div class="sidebar">
+        <!-- Recent Posts Widget -->
+        <div class="widget recent-posts">
+            <h2 class="widget-title">Recent Posts</h2>
+            <ul class="post-list">
+                <li><a href="/">Getting Started with MHRegistry</a></li>
+                <li><a href="/api-integration-guide">API Integration Guide</a></li>
+            </ul>
+        </div>
+
+        <!-- Plugin Releases Widget -->
+        <div class="widget plugin-releases">
+            <h2 class="widget-title">Plugin Releases</h2>
+            <div class="release-status">
+                <div class="status-indicator pending"></div>
+                <p><a href="https://github.com/crock/MHRegistry/releases/tag/v1.0-SNAPSHOT">v1.0-SNAPSHOT</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-container">
+        <p>&copy; 2025 <a href="https://domaincord.com">Domaincord Ventures</a>. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>hljs.highlightAll();</script>
+</body>
+</html>
